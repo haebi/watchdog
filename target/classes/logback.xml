@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+  <property name="LOG_PATH" value="./log" />
+  
+  <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/watchdog.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/watchdog.%d{yyyy-MM-dd}.log</fileNamePattern>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%-25([%d{yyyy-MM-dd HH:mm:ss.SSS}]) [%-5level] - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%-25([%d{yyyy-MM-dd HH:mm:ss.SSS}]) [%-5level] - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>error</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <file>${LOG_PATH}/watchdog_error.log</file>
+    <encoder>
+      <pattern>%-25([%d{yyyy-MM-dd HH:mm:ss.SSS}]) [%-5level] - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/watchdog_error.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+  
+  <root level="INFO">
+    <appender-ref ref="LOG_FILE" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ERROR_FILE" />
+  </root>
+  
+</configuration>
